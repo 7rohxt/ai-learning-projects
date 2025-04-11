@@ -19,14 +19,18 @@ def preprocessing(data):
     data.drop('ocean_proximity', axis=1, inplace=True)
 
     # Create new features
-    data['rooms_per_household'] = data['log_totalrooms'] / data['log_households']
+    data['rooms_per_household'] = data['log_total_rooms'] / data['log_households']
     data['bedroom_ratio'] = data['log_total_bedrooms'] / data['log_total_rooms']
     data['population_per_household'] = data['log_population'] / data['log_households']
 
-    # z-score transformation
-    for j in data.columns:
-        mean = data[j].mean()
-        std_dev = data[j].std()
-        data[j] = (data[j] - mean) / std_dev 
+    # Identify one-hot columns: numeric with only 0s and 1s
+    one_hot_cols = [col for col in data.columns if 
+                    data[col].nunique() <= 2 and set(data[col].unique()).issubset({0, 1})]
+
+    # Normalize columns with exceptions
+    def z_score_normalize(df, exclude_cols=[]):
+        cols_to_scale = [col for col in df.columns if col not in exclude_cols]
+        df[cols_to_scale] = (df[cols_to_scale] - df[cols_to_scale].mean()) / df[cols_to_scale].std()
+        return df
 
     return data
