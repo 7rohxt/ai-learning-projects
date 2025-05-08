@@ -15,7 +15,7 @@ def preprocessing(data):
     data = data.drop('ocean_proximity', axis=1)
 
     # Create new features
-    data['rooms_per_household'] = data['total_rooms'] / data['households']
-    data['bedroom_ratio'] = data['total_bedrooms'] / data['total_rooms']
+    data['rooms_per_household'] = np.log1p(data['total_rooms'] / data['households'])
+    data['bedroom_ratio'] = np.log1p(data['total_bedrooms'] / data['total_rooms'])
 
     return data
