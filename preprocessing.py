@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 
 def preprocessing(data):
-    # Drop rows with missing values
-    data = data.dropna()
 
     # Log transformation for the right-skewed columns
     data['total_rooms'] = np.log1p(data['total_rooms'])
@@ -19,6 +17,5 @@ def preprocessing(data):
     # Create new features
     data['rooms_per_household'] = data['total_rooms'] / data['households']
     data['bedroom_ratio'] = data['total_bedrooms'] / data['total_rooms']
-    data['population_per_household'] = data['population'] / data['households']
 
     return data
