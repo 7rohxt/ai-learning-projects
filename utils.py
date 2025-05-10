@@ -30,6 +30,9 @@ def preprocessing(data):
 
 
 def preprocess_user_input(data):
+    if data['ocean_proximity'].iloc[0] == "ISLAND":
+        data['ocean_proximity'] = "NEAR OCEAN"
+
     data['total_rooms'] = np.log1p(data['total_rooms'])
     data['total_bedrooms'] = np.log1p(data['total_bedrooms'])
     data['population'] = np.log1p(data['population'])
@@ -56,13 +59,12 @@ def get_unique_ocean_proximity(data):
     return data["ocean_proximity"].unique().tolist()
 
 
-def predict(housing_median_age, total_rooms, total_bedrooms,
+def predict_home_price(housing_median_age, total_rooms, total_bedrooms,
             population, households, median_income,
             ocean_proximity='INLAND',
             longitude=36.5, latitude=-119.5,
             model=None):
 
-    import pandas as pd
     input_data = pd.DataFrame([{
         "longitude": longitude,
         "latitude": latitude,
@@ -85,4 +87,4 @@ def predict(housing_median_age, total_rooms, total_bedrooms,
 if __name__ == '__main__':
     load_data()
     load_model()
-    print(predict(41, 880,129,322,126,8.3,'NEAR BAY', -122.23, 37.88, model))
+    print(predict_home_price(41, 880,129,322,126,8.3,'NEAR BAY', -122.23, 37.88, model))
