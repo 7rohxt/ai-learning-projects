@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Housing Price Predictor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <h1>California Housing Price Predictor</h1>
+    <div class="container">
+        <form id="predict-form">
+            <div class="form-group">
+                <label>Housing Median Age:</label>
+                <input type="number" name="housing_median_age" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Rooms:</label>
+                <input type="number" name="total_rooms" required>
+            </div>
+
+            <div class="form-group">
+                <label>Total Bedrooms:</label>
+                <input type="number" name="total_bedrooms" required>
+            </div>
+
+            <div class="form-group">
+                <label>Population:</label>
+                <input type="number" name="population" required>
+            </div>
+
+            <div class="form-group">
+                <label>Households:</label>
+                <input type="number" name="households" required>
+            </div>
+
+            <div class="form-group">
+                <label>Median Income:</label>
+                <input type="number" step="0.01" name="median_income" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ocean Proximity:</label>
+                <select name="ocean_proximity" id="ocean-proximity"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Longitude:</label>
+                <input type="number" step="0.01" name="longitude" value="-120.5">
+            </div>
+
+            <div class="form-group">
+                <label>Latitude:</label>
+                <input type="number" step="0.01" name="latitude" value="35.0">
+            </div>
+
+            <button type="submit">Predict</button>
+        </form>
+
+        <h2 id="result"></h2>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
