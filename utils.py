@@ -1,9 +1,12 @@
 import numpy as np
 import pandas as pd
 import pickle
+import os 
 
 def load_data():
-    return pd.read_csv("housing.csv")
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    csv_path = os.path.join(base_dir, 'housing.csv')     
+    return pd.read_csv(csv_path)
 
 
 def load_model():

@@ -1,11 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from utils import load_data, load_model, get_unique_ocean_proximity, predict_home_price
-import pandas as pd
 
 app = Flask(__name__)
 data = load_data()
 model = load_model()
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/get_ocean_proximity')
 def get_ocean_proximity():
@@ -14,7 +16,6 @@ def get_ocean_proximity():
 @app.route('/predict_price', methods=['POST'])
 def predict_price():
     user_input = request.get_json()
-
     try:
         prediction = predict_home_price(
             housing_median_age=user_input["housing_median_age"],
@@ -34,7 +35,5 @@ def predict_price():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 if __name__ == "__main__":
-    print("Starting")
-    app.run()
+    app.run(debug=True)
