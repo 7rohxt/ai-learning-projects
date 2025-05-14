@@ -2,3 +2,4 @@ housing.csv
 __pycache__
 models/
 cali-housing.pem
+aws-deployment/instructions.txt
