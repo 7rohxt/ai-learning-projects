@@ -3,3 +3,4 @@ cvlenv
 1-opencv-basics/resources/
 YOLO-weights
 datafiles
+6-people-counter/__pycache__
