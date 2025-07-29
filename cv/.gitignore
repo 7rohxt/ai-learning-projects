@@ -1,0 +1,7 @@
+opencv-basics/__pycache__/
+opencv-basics/resources/
+YOLO-weights
+datafiles
+car-counter/__pycache__
+people-counter/__pycache__
+YOLOX
