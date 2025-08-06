@@ -2,3 +2,4 @@ stock-prediction-pytorch/image.png
 rice-type-classification/riceClassification.csv
 2-animal-classification-cnn/afhq
 pytorch/data
+3-bean-leaf-transfer-learning/bean-leaf-dataset
