@@ -41,16 +41,28 @@ def table_to_markdown(table):
         md += "| " + " | ".join(str(c or "") for c in row) + " |\n"
     return md
 
-def extract_ordered_content(pdf_path):
+def extract_ordered_content(pdf_path, verbose=True):
+    if verbose:
+        print(f"\n📂 Opening PDF: {pdf_path}")
+
     fitz_doc = fitz.open(pdf_path)
     all_content = []
 
     with pdfplumber.open(pdf_path) as plumber_doc:
         for page_num in range(len(fitz_doc)):
+            
+            if verbose:
+                print(f"\n🔹 Processing Page {page_num + 1}")
+
             page_blocks = []
             fitz_page = fitz_doc[page_num]
             plumber_page = plumber_doc.pages[page_num]
-            table_bboxes = [t.bbox for t in plumber_page.find_tables()]
+
+            tables = plumber_page.find_tables()
+            table_bboxes = [t.bbox for t in tables]
+
+            if verbose:
+                print(f"   ➤ Tables detected: {len(tables)}")
 
             def is_inside_table(bbox, table_bboxes):
                 for tb in table_bboxes:
@@ -60,14 +72,19 @@ def extract_ordered_content(pdf_path):
 
             # --- 1. Text blocks ---
             blocks = fitz_page.get_text("dict")["blocks"]
+            text_count = 0
+
             for block in blocks:
                 if is_inside_table(block["bbox"], table_bboxes):
                     continue
+
                 if block["type"] == 0:
                     text = " ".join(
                         span["text"] for line in block["lines"] for span in line["spans"]
                     ).strip()
+
                     if text:
+                        text_count += 1
                         page_blocks.append({
                             "type": "text",
                             "content": text,
@@ -75,27 +92,42 @@ def extract_ordered_content(pdf_path):
                             "y": block["bbox"][1]
                         })
 
-            # --- 2. Images — use get_images() instead of block["image"] ---
-            for img in fitz_page.get_images(full=True):
-                xref = img[0]  # this is guaranteed to be an integer
+            if verbose:
+                print(f"   ➤ Text blocks added: {text_count}")
+
+            # --- 2. Images ---
+            images = fitz_page.get_images(full=True)
+            if verbose:
+                print(f"   ➤ Images detected: {len(images)}")
+
+            for img in images:
+                xref = img[0]
                 try:
                     img_bbox = fitz_page.get_image_bbox(img)
                     img_data = fitz_doc.extract_image(xref)
+
+                    if verbose:
+                        print(f"      ↳ Captioning image xref={xref}")
+
                     caption = caption_image(img_data["image"])
+
                     page_blocks.append({
                         "type": "image",
                         "content": f"[IMAGE DESCRIPTION]: {caption}",
                         "page": page_num + 1,
-                        "y": img_bbox.y0  # use actual image y position
+                        "y": img_bbox.y0
                     })
+
                 except Exception as e:
-                    print(f"Skipping image xref={xref} on page {page_num+1}: {e}")
+                    print(f"      ⚠ Skipping image xref={xref}: {e}")
                     continue
 
             # --- 3. Tables ---
-            for table in plumber_page.find_tables():
+            table_count = 0
+            for table in tables:
                 md = table_to_markdown(table.extract())
                 if md:
+                    table_count += 1
                     page_blocks.append({
                         "type": "table",
                         "content": f"[TABLE]:\n{md}",
@@ -103,7 +135,14 @@ def extract_ordered_content(pdf_path):
                         "y": table.bbox[1]
                     })
 
+            if verbose:
+                print(f"   ➤ Tables added: {table_count}")
+
             # --- 4. Sort by y position ---
             page_blocks_sorted = sorted(page_blocks, key=lambda b: b["y"])
             all_content.extend(page_blocks_sorted)
-        return all_content
+
+    if verbose:
+        print("\n✅ Extraction complete.\n")
+
+    return all_content
