@@ -82,14 +82,12 @@ output:
 Overall: Non-Compliant
 
 Test-wise Breakdown:
-- Water Test: Compliant
-  - No violations detected.
-- Dust Test: Compliant
-  - No violations detected.
-- Mud Test: Non-Compliant
-  - X778: Measured 4.8 mm/s vs threshold 4.0 mm/s
+- Water Test: Compliant.
+- Dust Test: Compliant.
+- Mud Test: Non-Compliant.
 
 Explanation:
-- Mud Test: Part X778 exceeded the vibration limit (4.8 mm/s > 4.0 mm/s).
-- Percentage of non-compliant components in Mud Test: 1 out of 5 (20% non-compliance).
-- Batch Rejection Rule: Batch is rejected for Mud Test as non-compliance exceeds 10%.
+- Mud Test:
+  - X778: Measured 4.8 mm/s vs threshold 4.0 mm/s.
+  - Violation percentage: 20% (1 out of 5 components).
+- According to the Batch-Level Rejection Rule, the entire batch is rejected because more than 10% of tested components exceeded their thresholds in the Mud Test.
