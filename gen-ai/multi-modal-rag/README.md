@@ -49,7 +49,8 @@ Focuses on extracting tables correctly without losing structure or duplicating t
 ### 🔹 Exp 3: Handling Images  
 [Open Notebook](https://github.com/7rohxt/ai-learning-hub/blob/main/gen-ai/multi-modal-rag/exp3_handling_images.ipynb)
 
-Extracts images, preserves their position, and generates captions for chart-based data.
+Appraoch 1 -> Generate Image Summary - Extracts images, preserves their position, and generates captions for chart-based data. 
+Approach 2 -> Using CLIP embeddings - Extracts images, generated CLIP image embeddings for direct cross-modal retrieval using text-to-image similarity search.
 
 ---
 
